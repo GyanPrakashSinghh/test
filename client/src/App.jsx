@@ -4,6 +4,7 @@ import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import AddEmployee from './components/AddEmployee';
 import EmployeeList from './components/EmployeeList';
+import HeroSection from './components/HeroSection';
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -20,6 +21,8 @@ function App() {
     <div className="min-h-screen bg-primary-light dark:bg-gradient-to-r dark:from-primary-dark dark:to-secondary-dark transition-colors duration-500">
       <Routes>
         <Route path="/" element={<Login setDarkMode={setDarkMode} />} />
+        <Route path="/login" element={<Login setDarkMode={setDarkMode} />} />
+        <Route path="/hero-section" element={<HeroSection setDarkMode={setDarkMode} />} />
         <Route path="/dashboard" element={<Dashboard setDarkMode={setDarkMode} />} />
         <Route path="/add-employee" element={<AddEmployee />} />
         <Route path="/employee-list" element={<EmployeeList />} />
