@@ -1,27 +1,27 @@
 import { useState, useEffect } from 'react';
 import gsap from 'gsap';
 import { Dialog, DialogPanel } from '@headlessui/react';
-import { Bars3Icon, XMarkIcon, ChevronDownIcon } from '@heroicons/react/24/outline'; // Import the down arrow icon
+import { Bars3Icon, XMarkIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';
 import fav from '../assets/fav.jpg';
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard' },
-  { 
-    name: 'Action', 
-    href: '#', 
+  {
+    name: 'Action',
+    href: '#',
     submenu: [
       { name: 'Add Employee', href: '/add-employee' },
       { name: 'Employee List', href: '/employee-list' },
-      { name: 'Another Action', href: '/another-action' }, // Just for demo, add more items to test
-    ]
+      { name: 'Another Action', href: '/another-action' },
+    ],
   },
 ];
 
 export default function HeroSection() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [loggedIn, setLoggedIn] = useState(true);
-  const [submenuOpen, setSubmenuOpen] = useState(false); // State to control the submenu visibility
+  const [submenuOpen, setSubmenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -30,39 +30,37 @@ export default function HeroSection() {
   };
 
   useEffect(() => {
-    // Animate the "Agastya" and "Analytics" text from left to right
-    gsap.fromTo('#agastya', 
-      { x: '-100%', opacity: 0 }, 
-      { 
-        x: '0%', 
-        opacity: 1, 
-        duration: 1, 
-        willChange: 'transform, opacity', 
+    gsap.fromTo('#agastya',
+      { x: '-100%', opacity: 0 },
+      {
+        x: '0%',
+        opacity: 1,
+        duration: 1,
+        willChange: 'transform, opacity',
         onComplete: () => {
-          gsap.fromTo('#analytics', 
+          gsap.fromTo('#analytics',
             { x: '-100%', opacity: 0 },
             { x: '0%', opacity: 1, duration: 1, willChange: 'transform, opacity', onComplete: animateText }
           );
-        }
+        },
       }
     );
   }, []);
 
-  // Function to animate the text below Agastya & Analytics
   const animateText = () => {
-    gsap.fromTo('#hero-text', 
-      { y: '50%', opacity: 0 }, 
-      { 
-        y: '0%', 
-        opacity: 1, 
-        duration: 1.5, 
-        willChange: 'transform, opacity' 
+    gsap.fromTo('#hero-text',
+      { y: '50%', opacity: 0 },
+      {
+        y: '0%',
+        opacity: 1,
+        duration: 1.5,
+        willChange: 'transform, opacity'
       }
     );
   };
 
   const handleActionClick = () => {
-    setSubmenuOpen(prev => !prev); // Toggle the submenu visibility
+    setSubmenuOpen(prev => !prev);
   };
 
   return (
@@ -94,14 +92,17 @@ export default function HeroSection() {
               <div className="hidden lg:flex lg:gap-x-12">
                 {navigation.map((item) => (
                   <div key={item.name} className="relative">
-                    <a href={item.href} className="text-sm/6 font-semibold text-gray-900 flex items-center" onClick={item.name === 'Action' ? handleActionClick : undefined}>
+                    <a
+                      href={item.href}
+                      className="text-sm/6 font-semibold text-gray-900 flex items-center"
+                      onClick={item.name === 'Action' ? handleActionClick : undefined}
+                    >
                       {item.name}
-                      {/* Action icon */}
                       {item.submenu && <ChevronDownIcon className="ml-2 h-4 w-4 text-gray-600" />}
                     </a>
                     {submenuOpen && item.submenu && (
-                      <div className="absolute left-0 mt-2 space-y-2 bg-white text-gray-900 p-4 rounded-md shadow-lg w-64 transition-all duration-300 ease-in-out opacity-100">
-                        {item.submenu.map((subItem) => (
+                      <div className="absolute right-1 mt-2 space-y-2 bg-white text-gray-900 p-4 rounded-md shadow-lg w-64 transition-all duration-300 ease-in-out opacity-100 overflow-hidden">
+                      {item.submenu.map((subItem) => (
                           <a
                             key={subItem.name}
                             href={subItem.href}
@@ -151,11 +152,12 @@ export default function HeroSection() {
                           <a
                             href={item.href}
                             className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
+                            onClick={item.name === 'Action' ? handleActionClick : undefined}
                           >
                             {item.name}
                           </a>
                           {item.submenu && submenuOpen && (
-                            <div className="space-y-2">
+                            <div className="space-y-2 overflow-hidden">
                               {item.submenu.map((subItem) => (
                                 <a
                                   key={subItem.name}
