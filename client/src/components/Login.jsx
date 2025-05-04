@@ -13,7 +13,7 @@ function Login() {
   };
 
   return (
-    <div className="h-screen bg-violet-100 flex items-center justify-center">
+    <div className="h-screen bg-violet-50 flex items-center justify-center">
       <div className="w-full max-w-md space-y-8 bg-white p-8 rounded-xl shadow-md">
         <div className="text-center">
           <img
@@ -38,7 +38,7 @@ function Login() {
               required
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              className="mt-1 block h-10 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             />
           </div>
 
@@ -53,7 +53,7 @@ function Login() {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              className="mt-1 block h-10 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             />
           </div>
 

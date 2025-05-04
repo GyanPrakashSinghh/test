@@ -1,19 +1,27 @@
 import { useState, useEffect } from 'react';
 import gsap from 'gsap';
 import { Dialog, DialogPanel } from '@headlessui/react';
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { Bars3Icon, XMarkIcon, ChevronDownIcon } from '@heroicons/react/24/outline'; // Import the down arrow icon
 import { useNavigate } from 'react-router-dom';
 import fav from '../assets/fav.jpg';
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard' },
-  { name: 'Add Employee', href: '/add-employee' },
-  { name: 'Employee List', href: '/employee-list' },
+  { 
+    name: 'Action', 
+    href: '#', 
+    submenu: [
+      { name: 'Add Employee', href: '/add-employee' },
+      { name: 'Employee List', href: '/employee-list' },
+      { name: 'Another Action', href: '/another-action' }, // Just for demo, add more items to test
+    ]
+  },
 ];
 
 export default function HeroSection() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [loggedIn, setLoggedIn] = useState(true);
+  const [submenuOpen, setSubmenuOpen] = useState(false); // State to control the submenu visibility
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -22,16 +30,40 @@ export default function HeroSection() {
   };
 
   useEffect(() => {
+    // Animate the "Agastya" and "Analytics" text from left to right
     gsap.fromTo('#agastya', 
       { x: '-100%', opacity: 0 }, 
-      { x: '0%', opacity: 1, duration: 1.5, willChange: 'transform, opacity', onComplete: () => {
-        gsap.fromTo('#analytics', 
-          { x: '-100%', opacity: 0 },
-          { x: '0%', opacity: 1, duration: 1.5, willChange: 'transform, opacity' }
-        );
-      }}
+      { 
+        x: '0%', 
+        opacity: 1, 
+        duration: 1, 
+        willChange: 'transform, opacity', 
+        onComplete: () => {
+          gsap.fromTo('#analytics', 
+            { x: '-100%', opacity: 0 },
+            { x: '0%', opacity: 1, duration: 1, willChange: 'transform, opacity', onComplete: animateText }
+          );
+        }
+      }
     );
   }, []);
+
+  // Function to animate the text below Agastya & Analytics
+  const animateText = () => {
+    gsap.fromTo('#hero-text', 
+      { y: '50%', opacity: 0 }, 
+      { 
+        y: '0%', 
+        opacity: 1, 
+        duration: 1.5, 
+        willChange: 'transform, opacity' 
+      }
+    );
+  };
+
+  const handleActionClick = () => {
+    setSubmenuOpen(prev => !prev); // Toggle the submenu visibility
+  };
 
   return (
     <div className="bg-white">
@@ -40,7 +72,7 @@ export default function HeroSection() {
           <header className="absolute inset-x-0 top-0 z-50">
             <nav aria-label="Global" className="flex items-center justify-between p-6 lg:px-8">
               <div className="flex lg:flex-1">
-                <a href="#" className="-m-1.5 p-1.5">
+                <a href="/hero-section" className="-m-1.5 p-1.5">
                   <span className="sr-only">Agastya Analytics</span>
                   <img
                     alt=""
@@ -61,9 +93,26 @@ export default function HeroSection() {
               </div>
               <div className="hidden lg:flex lg:gap-x-12">
                 {navigation.map((item) => (
-                  <a key={item.name} href={item.href} className="text-sm/6 font-semibold text-gray-900">
-                    {item.name}
-                  </a>
+                  <div key={item.name} className="relative">
+                    <a href={item.href} className="text-sm/6 font-semibold text-gray-900 flex items-center" onClick={item.name === 'Action' ? handleActionClick : undefined}>
+                      {item.name}
+                      {/* Action icon */}
+                      {item.submenu && <ChevronDownIcon className="ml-2 h-4 w-4 text-gray-600" />}
+                    </a>
+                    {submenuOpen && item.submenu && (
+                      <div className="absolute left-0 mt-2 space-y-2 bg-white text-gray-900 p-4 rounded-md shadow-lg w-64 transition-all duration-300 ease-in-out opacity-100">
+                        {item.submenu.map((subItem) => (
+                          <a
+                            key={subItem.name}
+                            href={subItem.href}
+                            className="block px-4 py-3 text-sm font-semibold hover:bg-gray-50 rounded-md"
+                          >
+                            {subItem.name}
+                          </a>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 ))}
                 <button
                   onClick={handleLogout}
@@ -98,13 +147,27 @@ export default function HeroSection() {
                   <div className="-my-6 divide-y divide-gray-500/10">
                     <div className="space-y-2 py-6">
                       {navigation.map((item) => (
-                        <a
-                          key={item.name}
-                          href={item.href}
-                          className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
-                        >
-                          {item.name}
-                        </a>
+                        <div key={item.name}>
+                          <a
+                            href={item.href}
+                            className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
+                          >
+                            {item.name}
+                          </a>
+                          {item.submenu && submenuOpen && (
+                            <div className="space-y-2">
+                              {item.submenu.map((subItem) => (
+                                <a
+                                  key={subItem.name}
+                                  href={subItem.href}
+                                  className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
+                                >
+                                  {subItem.name}
+                                </a>
+                              ))}
+                            </div>
+                          )}
+                        </div>
                       ))}
                     </div>
                     <div className="py-6">
@@ -142,8 +205,8 @@ export default function HeroSection() {
                 <h1 id="analytics" className="text-5xl font-semibold tracking-tight text-balance text-gray-900 sm:text-7xl opacity-0">
                   Analytics
                 </h1>
-                <p className="mt-8 text-lg font-medium text-pretty text-gray-500 sm:text-xl/8">
-                  Agastya analytics provides a one-stop ERP solution for enterprises.
+                <p id="hero-text" className="mt-8 text-lg font-medium text-pretty text-gray-500 sm:text-xl/8 opacity-0">
+                  Agastya Analytics is not just an ERP system; it's a comprehensive solution designed to meet the dynamic needs of modern enterprises. With our user-friendly interface, customizable modules, and real-time data analysis, we ensure that your business can grow, adapt, and succeed in an ever-evolving marketplace.
                 </p>
               </div>
             </div>
